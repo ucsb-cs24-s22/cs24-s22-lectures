@@ -47,9 +47,9 @@ class Complex{
             // r is just a parameter   
             imag = r;
         }
-        //What is the type of the parameter passed into add function?
+        //What is the type of the parameter passed into the "add" function?
         //What is the return type?
-        Complex operator+(Complex other){
+        Complex operator+(Complex& other){
             Complex result;
             result.real = real + other.real;
             result.imag = imag + other.imag;
@@ -65,8 +65,8 @@ void operator<<(ostream& out, Complex data){
 int main(int argc, char const *argv[])
 {
     Complex c; // c is an object of type Complex or c is an instance of complex
-    // c.real = ? c.imag = ? (are some random value)
-    // c++ does not automatically initial variables for us including objects
+    // c.real and c.imag  are some random value
+    // c++ does NOT automatically initial variables 
     c.setReal(10); //10+j?
     c.setImag(10);
     cout<<c.getReal()<<endl; // always 10
@@ -80,6 +80,7 @@ int main(int argc, char const *argv[])
 
     //Complex x = c.add(m); //
     Complex x = c + m; // c.opertaor+(m)
+                        //
     //x.print();
     cout << x ; // cout is an object of class ostream, x is an object of type Complex
     //cout.operator<<(x); //Not allowed!
