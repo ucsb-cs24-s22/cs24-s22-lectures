@@ -1,8 +1,14 @@
-//Lecture 4: Object Oriented Programming
-// Objects are central to how we organize or think about code.
-// - Code objects by their attributes and behavior 
-// Example: Complex numbers  a + jb, j = sqrt(-1)
-// hide information 
+//Lecture 5: Big Four
+/* Four  special functions of any class*/
+/* Call to the functions is implicit: foo();
+1. Constructor: Function called RIGHT after an object is created
+                and used to initialize objects of the class
+2. Destructor: Function used to do some  "tear down" tasks RIGHT before an object is deleted from memory
+3. Copy constructor: Variation of the constructor 
+// Complex c1(c2); // c1 and c2 are both of type Complex
+4. Copy assignment operator
+*/
+
 
 #include <iostream>
 #include <cmath>
@@ -13,6 +19,24 @@ class Complex{
         double real;
         double imag;
     public:
+        //constructor: same name as the class, no return type, default provided by C++
+        // Complex c(10, 10); 
+        // Complex c {10, 10}; C++11 syntax
+        // Complex c;
+        // Parameterized constructor with default values
+        /*Complex(){
+            real = imag = 0;
+        }*/
+        Complex(double re = 0, double im = 0){
+            cout<<"Inside the constructor"<<endl;
+            real= re;
+            imag = im;
+        }
+        // default destructor provided by c++
+        // called RIGHT before an object of type Complex is deleted from memory (stack or heap)
+        ~Complex(){
+            cout<<"Inside the destructor"<<endl;
+        }
         //member functions
         //getters or accessors (compute or return some data) but they don't modify the object
         double getMagnitude() const{
@@ -29,7 +53,12 @@ class Complex{
         }
 
         void print() const{
-            cout<<real<< "+ j"<<imag<<endl;
+            if(imag>=0){
+                cout<<real<< "+"<<imag<<"j"<<endl;
+            }else if(imag < 0){
+                cout<<real<< "-"<<-imag<<"j"<<endl;
+            }
+            
         }
      //setters: modify the object    
         void conjugate(){
@@ -47,46 +76,60 @@ class Complex{
             // r is just a parameter   
             imag = r;
         }
-        //What is the type of the parameter passed into the "add" function?
+ 
         //What is the return type?
         Complex operator+(Complex& other){
+            cout<<"Inside the operator + function"<<endl;
             Complex result;
             result.real = real + other.real;
             result.imag = imag + other.imag;
+            cout<<"Returning from operator +"<<endl;
             return result;
         }
-        
+        //C++ default copy constructor
+        Complex(const Complex& other){
+            real = other.real;
+            imag = other.imag;
+        }
+        //Default copy assignment
+        Complex& operator=(const Complex& other){
+            real = other.real;
+            imag = other.imag; 
+            return *this;
+        }       
 };
 
-void operator<<(ostream& out, Complex data){
+ostream& operator<<(ostream& out, Complex data){
     data.print();
+    return out;
 }
-//What's a good way of initializing objects of the class?
+//cout<<c1; operator<<(cout, c1);
+//(cout<<c1)<<endl; // (a + b) + c
+//cout<<endl;
+
+//What's a good way of initializing objects of the class? By implementing a constructor
 int main(int argc, char const *argv[])
 {
-    Complex c; // c is an object of type Complex or c is an instance of complex
+    Complex c(10, 10); // c is an object of type Complex or c is an instance of complex
     // c.real and c.imag  are some random value
     // c++ does NOT automatically initial variables 
-    c.setReal(10); //10+j?
-    c.setImag(10);
-    cout<<c.getReal()<<endl; // always 10
-    //c.real = 0; // Not allowed by the compiler because real and imag are private members
-    //c.imag = 0;
-    cout<<c.getMagnitude()<<endl; //10
-
-    Complex m;
-    m.setReal(20); //10+j?
-    m.setImag(20);
-
-    //Complex x = c.add(m); //
-    Complex x = c + m; // c.opertaor+(m)
-                        //
-    //x.print();
-    cout << x ; // cout is an object of class ostream, x is an object of type Complex
-    //cout.operator<<(x); //Not allowed!
-    //operator<<(cout, x);
-
-
+    // constructor for Complex is called
+    Complex m {20, 20}; //C++ 11 notation
+    Complex x = c + m; // c.opertaor+(m), calls copy constructor
+    cout << x ; // cout is an object of  ostream, 
+                // x is an object of type Complex
+                // Compiler decides which implementation of << to call based on type of operands
+ 
+    Complex* c1 = new Complex{20, 40}; //calls constructor
+    cout<<"c1: "<<*c1<<endl; // 20+40j
+    //cout<<endl;
+    Complex c3(*c1); //Calls the copy constructor 
+    cout<<"c3: "<<c3;//20+40j
+    cout<<endl;
+    Complex c4(c);
+    cout<<"c4: "<<c4<<endl; //10+10j
+    delete c1; //calls destructor
+    //Several calls to destructor to remove stack objects c, m, x, c3, c4
     return 0;
 }
 
