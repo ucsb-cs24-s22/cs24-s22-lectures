@@ -91,12 +91,7 @@ class Complex{
             real = other.real;
             imag = other.imag;
         }
-        //Default copy assignment
-        Complex& operator=(const Complex& other){
-            real = other.real;
-            imag = other.imag; 
-            return *this;
-        }       
+     
 };
 
 ostream& operator<<(ostream& out, Complex data){
