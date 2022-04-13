@@ -1,12 +1,7 @@
-//Lecture 5: Big Four
-/* Four  special functions of any class*/
-/* Call to the functions is implicit: foo();
-1. Constructor: Function called RIGHT after an object is created
-                and used to initialize objects of the class
-2. Destructor: Function used to do some  "tear down" tasks RIGHT before an object is deleted from memory
-3. Copy constructor: Variation of the constructor 
-// Complex c1(c2); // c1 and c2 are both of type Complex
-4. Copy assignment operator
+//Lecture 6: 
+/*
+1. Automate compiling C++ programs
+2. Why did we get three calls to the constructor and 4 to the destructor
 */
 
 #include <iostream>
@@ -74,7 +69,7 @@ class Complex{
             imag = r;
         }
  
-        //What is the return type?
+      //Don't return the result by reference because....result is a local variable
         Complex operator+(Complex& other){
             //cout<<"Inside the operator + function"<<endl;
             Complex result;
@@ -85,13 +80,24 @@ class Complex{
         }
         //C++ default copy constructor
         Complex(const Complex& other){
+            this->real = other.real;
+            this->imag = other.imag;
+            cout<<"inside copy constructor"<<endl;
+        }
+
+        //Assignment operator (C++ provides a default version)
+        Complex& operator=(const Complex other){
             real = other.real;
             imag = other.imag;
+            cout<<"inside copy assignment"<<endl;
+            return *this;
+
         }
      
 };
-
-ostream& operator<<(ostream& out, Complex data){
+//cout<<x;
+//Complex data = x; // copy constructor
+ostream& operator<<(ostream& out, Complex& data){
     data.print();
     return out;
 }
@@ -107,12 +113,20 @@ int main(int argc, char const *argv[])
     // c++ does NOT automatically initial variables 
     // constructor for Complex is called
     Complex m {20, 20}; //C++ 11 notation
-    c = c + m; // c.operator+(m)
+
+    cout<<"c = c + m;"<<endl;
+    m = c = c + m; // c.operator+(m) and copy assignment operator
+    //cout<<c<<m<<endl;
+
+    cout<<"Complex x = c;"<<endl;
     Complex x = c; // calls copy constructor
+
+    cout<<"cout << x ;"<<endl;
     cout << x ; // cout is an object of  ostream, 
                 // x is an object of type Complex
                 // Compiler decides which implementation of << to call based on type of operands
-    
+ 
+    /*
     Complex* c1 = new Complex{20, 40}; //calls constructor
     cout<<"c1: "<<*c1<<endl; // 20+40j
     //cout<<endl;
@@ -122,7 +136,7 @@ int main(int argc, char const *argv[])
     Complex c4(c);
     cout<<"c4: "<<c4<<endl; //10+10j
     delete c1; //calls destructor
-    
+    */
     //Several calls to destructor to remove stack objects c, m, x, c3, c4
     return 0;
 }
