@@ -14,8 +14,6 @@ void test_prepend(){
     list.print();
     list.prepend(TAs[3]);
     list.print();
-    list.clear();
-    list.print();
 }
 
 void test_copyconstructor(){
@@ -51,6 +49,6 @@ int main(int argc, char const *argv[])
 {
     test_prepend();
     //example_segfault();
-    test_copyconstructor();
+    //test_copyconstructor();
     return 0;
 }
